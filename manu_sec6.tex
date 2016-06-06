@@ -1,0 +1,443 @@
+%%%%%%%%%%%%%%%%%%%%%%% file template.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is a general template file for the LaTeX package SVJour3
+% for Springer journals.          Springer Heidelberg 2010/09/16
+%
+% Copy it to a new file with a new name and use it as the basis
+% for your article. Delete % signs as needed.
+%
+% This template includes a few options for different layouts and
+% content for various journals. Please consult a previous issue of
+% your journal as needed.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% First comes an example EPS file -- just ignore it and
+% proceed on the \documentclass line
+% your LaTeX will extract the file if required
+\begin{filecontents*}{example.eps}
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: 19 19 221 221
+%%CreationDate: Mon Sep 29 1997
+%%Creator: programmed by hand (JK)
+%%EndComments
+gsave
+newpath
+  20 20 moveto
+  20 220 lineto
+  220 220 lineto
+  220 20 lineto
+closepath
+2 setlinewidth
+gsave
+  .4 setgray fill
+grestore
+stroke
+grestore
+\end{filecontents*}
+%
+\RequirePackage{fix-cm}
+%
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+%\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+%
+\usepackage{graphicx}
+\usepackage{amssymb,amsmath}
+\usepackage{array,tabularx,multirow}
+\usepackage[linesnumbered,boxed]{algorithm2e}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
+%
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+
+%\newtheorem{lemma}{\bf{Lemma}}[section]
+
+%\newtheorem{theorem}{\bf{Theorem}}[section]
+
+%\newtheorem{definition}{Definition}[section]
+% Insert the name of "your journal" with
+% \journalname{myjournal}
+
+\begin{document}
+
+\title{A Preconditioning Algorithm for Large Linear Systems Based on A Low-stretch Spanning Tree% Based on a Low-stretch Spanning Tree  %\thanks{Grants or other notes
+%about the article that should go on the front page should be
+%placed here. General acknowledgments should be placed at the end of the article.}
+%A practical preconditioning algorithm for Laplacian(SDD) linear system
+}
+%\subtitle{Do you have a subtitle?\\ If so, write it here}
+
+%\titlerunning{Short form of title}        % if too long for running head
+
+\author{Huirong Zhang \and  Jianwen Cao \and Xiaohui Liu  %etc.
+}%\inst{1,2}
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{H.R. Zhang \at
+              State Key Laboratory of Computer Science, Institute of Software Chinese Academy of Sciences. \\
+              \email{zhang06.happy@163.com}           %  \\
+%%             \emph{Present address:} of F. Author  %  if needed
+           \and
+           J.W. Cao \at
+             State Key Laboratory of Computer Science, Institute of Software Chinese Academy of Sciences.\\
+           \and
+           X.H. Liu  \at
+              State Key Laboratory of Computer Science, Institute of Software Chinese Academy of Sciences.\\
+}
+
+%\institute{  State Key Laboratory of Computer Science, Institute of Software Chinese Academy of Sciences. \\
+%              \email{zhang06.happy@163.com}           %  \\
+%%             \emph{Present address:} of F. Author  %  if needed
+%           \and
+%             State Key Laboratory of Computer Science, Institute of Software Chinese Academy of Sciences.\\
+%          }
+
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
+
+\maketitle
+
+\begin{abstract}
+In this paper, we present an efficient algorithm for preconditioning sparse, symmetric, diagonally-dominant(SDD) linear systems by using combinatorial preconditioning techniques.  Firstly, we build a low-stretch spanning tree of a graph associated with a linear system by using algorithm proposed by Alon et al. and  add appropriate high stretch edges to the tree straightly or add edges based on a tree-decomposition algorithm to get an optimized subgraph. Then, convert the subgraph into a SDD matrix and take it as a preconditioner. %solve a  SDD system $Ax=b$ preconditioned by a matrix converted from the subgraph we create.
+Finally, we give an implementation and  performance analysis of our subgraph preconditioners. %We show experimentally that these combinatorial preconditioners  have robust convergence and  have good scalability.
+We test the algorithm on extensive numerical experiments arising from both elliptic PDEs and  Laplacian systems of network graphs. Numerical experiments show that preconditioners constructed by our algorithm are more efficient than incomplete Choleskey factorization preconditioners and Vaidya's preconditioners. Moreover, our preconditioning algorithm is insensitive to the boundary condition and it scales well. %, which means our combinatorial preconditioning algorithm has good scalability.
+%In addition, for the 2-D problems considered in this paper, preconditioners obtained based on a low stretch tree have better performance than  incomplete
+%Cholesky preconditioners, which is sensitive to boundary  and anisotropy.
+  Besides, the efficiency of our subgraphs preconditioners depends on not only the stretch  but also depends on the sparsity.  %But they are % and matrix size.
+
+
+%\noindent {\bf AMS subject classifications: }
+\keywords{preconditioning algorithm \and linear systems  \and low-stretch spanning tree \and tree-decomposition \and experimental analysis}
+%\keywords{PCG Algorithm;  Augmented low stretch spanning tree; Tree-decomposition; SDD linear systems}
+% \PACS{PACS code1 \and PACS code2 \and more}
+% \subclass{MSC code1 \and MSC code2 \and more}
+\end{abstract}
+
+
+
+\section{Conclusions}\label{sec:5}
+
+In this paper, we present an efficient algorithm for preconditioning sparse, symmetric, diagonally-dominant (SDD) linear systems based on a low-stretch spanning tree algorithm.
+% We compare our preconditioning algorithm to  drop-tolerance incomplete Cholesky factorization(IC) preconditioners and Vaidya's preconditioners.
+ We test the performance of our algorithm on extensive numerical experiments involving   linear systems arising from Poisson problems (considering  both isotropic and anisotropic cases) and  linear systems arising from unweighted graphs (including both mesh like graphs and unstructured network graphs).  These experiment results all show that our preconditioning algorithm is more efficient than drop-tolerance incomplete Cholesky factorization (IC) preconditioners and Vaidya's preconditioners.
+
+%The numerical experiments show that our preconditioning algorithm is more efficient than drop-tolerance incomplete Cholesky factorization(IC) preconditioners and Vaidya's preconditioners not only for linear systems arising from Poisson problems(considering  both isotropic and anisotropic cases), but also for  linear systems arising from unweighted graphs(including both mesh like graphs and unstructured network graphs). %The right hand sides are generated randomly.
+%combinatorial preconditioners obtained by our algorithm  have robust convergence.
+%They are insensitive to the numerics of the problem. Their performance does not vary much when we change the boundary conditions of the problems, or when we change the direction of anisotropy in anisotropic problems.
+ The first  part of test examples for Poisson problems show our combinatorial preconditioning algorithm (Algorithm \ref{com_pre}) scales well, as the number of iterations grow slowly as mesh size grows. %, which means our combinatorial preconditioning algorithm has good scalability.
+%In addition, for the 2-D problems considered in this paper, preconditioners obtained based on a low stretch tree have better performance than  incomplete
+%Cholesky preconditioners, which is sensitive to boundary  and anisotropy.
+ Moreover, the smallest generalized eigenvalues of a linear system preconditioned by a subgraph preconditioner is 1, just as analyzed in Theorem \ref{th5}.
+The second part of examples for network graphs show that  when a spanning tree of the underlying graph of a matrix has  low  average stretch, %or small max stretch at the same time,
+a preconditioner constructed based on such a spanning tree applied with a CG solver converge fast. Besides, the efficiency of our subgraphs preconditioners depends on not only the
+stretch  but also depends on the sparsity.
+%condition number of matrices but also depends on the sparsity and matrix size.
+%, just as perform in experiments the preconditioned system has a large cluster of eigenvalues near 1,
+
+%We will further research on developing efficient  algorithms for  preconditioning more large scale and complicated graphs or numerical problems.
+We will further develop efficient  algorithms for  preconditioning  larger scale and more complicated graphs or numerical problems.
+
+
+%we can find low stretch spanning trees indeed  have lower stretch than a random spanning tree. In fact,
+%  for all the graphs are unweighted, any random spanning tree is just a maximum spanning trees.  Besides, from the experimental results shown in Table \ref{tab_net_time} we find that  the sparser of a matrix is, the better AKPW preconditioners perform than Vaidya's preconditioners. Moreover, for large  matrices, AKPW preconditioners are obviously more efficient  than Vaidya's preconditioners. So, the efficiency of our subgraphs preconditioners depends on not only the condition number of matrices but also depends on the sparsity and matrix size.
+
+%What's more, when a spanning tree of the underlying graph of a matrix has  low  average stretch or small max stretch at the same time, a preconditioner obtained based on such a spanning tree approximate the matrix well in terms of spectral distribution, just as perform in experiments the preconditioned system has a large cluster of eigenvalues near 1, which means fast convergence of PCG.  We will further research on developing efficient  algorithms for  preconditioning more large scale and complicated graphs or numerical problems.
+
+
+%\section{Conflict of Interests}
+%The authors declare that there is no conflict of interests to this work.
+
+
+\begin{acknowledgements}
+This research  is supported by the Chinese NSF grants (no.~91230109).
+\end{acknowledgements}
+
+% BibTeX users please use one of
+%\bibliographystyle{spbasic}      % basic style, author-year citations
+%\bibliographystyle{spmpsci}      % mathematics and physical sciences
+%\bibliographystyle{spphys}       % APS-like style for physics
+%\bibliography{}   % name your BibTeX data base
+
+% Non-BibTeX users please use
+\begin{thebibliography}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 参考文献第一版，
+% and use \bibitem to create references. Consult the Instructions
+% for authors for reference list style.%
+%\bibitem{ME52} M. Hestenes, E. Stiefel. Methods of conjugate gradients for solving linear systems, J.
+%Res. Natl. Bureau Standards, 49 (1952), pp. 409–436.
+%\bibitem{Book1} P. Concus, G.H. Golub, and D.P. O’Leary. A generalized conjugate gradient method for the
+%numerical solution of elliptic partial differential equations, in Sparse Matrix Computations, J.R. Bunch and D.J. Rose, eds., Academic Press, New York, 1976, pp. 309–332.
+%\bibitem{Book2} Saad, Y.: Iterative Methods for Sparse Liners Systems, 2nd edn. SIAM, Philadelphia (2003)
+%
+%\bibitem{ABN} I. Abraham, Y. Bartal, and O. Neiman. Nearly tight low stretch spanning
+%trees. In Proceedings of the 49th Annual IEEE Symposium on Foundations
+%of Computer Science, pages 781-790, Oct. 2008.
+%\bibitem{AKPW} N. Alon, R.M. Karp, D.Peleg, and D. West. A graph theoretic game and its application to the k server problem. SIAM J. Comput., 24(1):78-100, 1995.
+%
+%\bibitem{AL86} O. Axelsson and G. Lindskog. On the rate of convergence of the preconditioned conjugate gradient method. Numerische Mathematik, 48(5):499-523, 1986.
+%\bibitem{Aw} B. A werbuch. Complexity of network synchronization. Journal of the ACM, 32(4):804-823, Oct. 1985.
+%\bibitem{BH} E.G. Boman, B. Hendrickson. Support Theory for Preconditioning, SIAM J. Matrix Anal. Appl., Vol. 25, No. 3, pp. 694-717 (2003).
+%\bibitem{BH01} E.G. Boman, B. Hendrickson. On spanning tree preconditioners. Manuscript, Sandia National Lab., 2001.
+%
+%\bibitem {BHT} E.G. Boman, D. Chen, B. Hendrickson, and S. Toledo. Maximum weight-basis Preconditioners, Numerical Linear Algebra with Applications, Vol. 11, pp. 695-721 (2004).
+%
+%\bibitem{CGT} D. Chen, J.R Gilbert, and S.Toledo. Obtaining bounds on the two norm of a matrix from the splitting lemma, Electronic Transactions on
+%Numerical Analysis, Vol. 21, 2005, pp. 28-46.
+%\bibitem{factor} E.G.Boman, D. Chen, O.Parekh, and S.Toledo. On factor width and symmetric h-matrices, Linear Algebra and its Applications 405, 239-248(2005)
+%
+%\bibitem{EEST} M. Elkin, Y. Emek, D.A. Spielman, and S.H. Teng. Lower-stretch spanning trees. SIAM Journal on Computing, 32(2):608-628,2008.
+%\bibitem{support} M. Bern, J.R. Gilbert, B. Hendrickson, N. Nguyen, and S. Toledo. Support-graph
+%preconditioners. SIAM J Matrix Anal Appl 2006;27(4):930-951.
+%\bibitem{Chen_Tov} D. Chen, S. Toledo. Vaidya's preconditioners: Implementation and experimental study, Electronic Transactions on Numerical Analysis, 16 (2003), pp. 30-49.
+%\bibitem{KMT} I. Koutis, G.L. Miller, and D. Tolliver. Combinatorial preconditioners and multilevel solvers for problems in computer vision and image processing. Computer
+%Vision and Image Understanding, 115(12):1638-1646, 2011.
+%
+%%\bibitem{MJB}
+%% Bern M, Gilbert JR, Hendrickson B, Nguyen N, Toledo S. Support-graph
+%%preconditioners. SIAM J Matrix Anal Appl 2006;27(4):930–51
+%
+%\bibitem{GG} G. Strang, G.J. Fix. An Analysis of the Finite Element Method. Prentice-Hall, Englewood Cliffs, NJ 07632, USA,
+%1973.
+%
+%
+%
+%\bibitem{LA} L.A. Hageman, D.M. Young. Applied iterative methods. Computer Science and Applied Mathematics. Academic
+%Press, New Y ork, NY, USA, 1981.
+%
+%\bibitem{LB} O.E. Livne, A. Brandt. Lean algebraic multigrid (LAMG): Fast graph Laplacian linear solver. SIAM
+%Journal on Scientific Comp., 34(4):B499-B522, 2012.
+%
+%
+%\bibitem{Germban} K. Gremban. Combinatorial Preconditioners for Sparse, Symmetric, Diagonally Dominant Linear Systems. PhD thesis, Carnegie Mellon University, CMU-CS-96-123, 1996.
+%\bibitem{petal} I. Abraham, O. Neiman. Using petal-decompositions to
+%build a low stretch spanning tree. In Proceedings of the
+%44th symposium on Theory of Computing, STOC '12, pages
+%395-406, New York, NY, USA, 2012. ACM.
+%\bibitem{vaidya} P. Vaidya. Solving linear equations with symmetric diagonally dominant matrices by constructing good preconditioners. Unpublished manuscript. A talk based on
+%the manuscript was presented at the IMA Workshop on Graph Theory and Sparse
+%Matrix Computation, Oct 1991.
+%
+%
+%
+%\bibitem{SF} S.F. McCormick. Multigrid Methods, volume 3 of Frontiers in Applied Mathematics. SIAM Books, Philadelphia, 1987.
+%%
+%%\bibitem{ST04}
+%%D. A.~Spielman and S.H.~Teng. Nearly-linear time algorithms for graph
+%%partitioning, graph sparsification, and solving linear systems. In Proceedings of the
+%%thirty-sixth annual ACM Symposium on Theory of Computing, pages 81–90, 2004.
+%%Full version available at http://arxiv.org/abs/cs.DS/0310051.
+%
+%
+%%\bibitem{ST04}
+%%D.~A. Spielman and S.~H. Teng. {\em Nearly-linear time algorithms for graph
+%%partitioning, graph sparsification, and solving linear systems}. In Proceedings of the
+%%thirty-sixth annual ACM Symposium on Theory of Computing,(2004), pp.~81-90.
+%%%Full version available at http://arxiv.org/abs/cs.DS/0310051.
+%%\bibitem{ST06}
+%%D.~A. Spielman and S.~H. Teng. {\em Nearly-linear time
+%%algorithms for preconditioning and solving symmetric,
+%%diagonally dominant linear systems}. CoRR,
+%%abs/cs/0607105, 2006.
+%
+%\bibitem{ST04} D.A. Spielman, S.H. Teng.  Nearly-linear time algorithms for graph
+%partitioning, graph sparsification, and solving linear systems. In Proceedings of the
+%thirty-sixth annual ACM Symposium on Theory of Computing,(2004), pp.~81-90.
+%%Full version available at http://arxiv.org/abs/cs.DS/0310051.
+%\bibitem{ST06} D.A. Spielman, S.H. Teng. Nearly-linear time algorithms for preconditioning and solving symmetric,
+%diagonally dominant linear systems. CoRR,
+%abs/cs/0607105, 2006.
+%
+%\bibitem{SW}
+%D.A. Spielman, J. Woo. A Note on Preconditioning by Low-Stretch
+%Spanning Trees, 2009.
+%\bibitem{SS08} D.A. Spielman, N. Srivastava. Graph sparsification by effective resistances. In Proceedings of the 40th annual ACM Symposium on Theory of Computing,
+%pages 563-568, 2008.
+%
+%\bibitem{KMP10} I. Koutis, G.L. Miller, and R. Peng. Approaching optimality for solving sdd linear
+%systems. In Foundations of Computer Science (FOCS), 2010 51st Annual IEEE
+%Symposium on, pages 235 –244, 2010.
+%
+%\bibitem{DA} D.A. Spielman, {\em Algorithms, Graph Theory, and Linear
+%Equations in Laplacian Matrices.} In Proceedings of the
+%International Congress of Mathematicians, 2010.
+%\bibitem{KMP11} I. Koutis, G.L. Miller, and R. Peng. A nearly$-mlogn$ time solver for sdd linear
+%systems. In Foundations of Computer Science (FOCS), 2011 52nd Annual IEEE
+%Symposium on, pages 590–598, 2011.
+%
+%
+%
+%%\bibitem{Kern}J.~A. Kelner, L. Orecchia, A. Sidford, and Z.~A. Zhu.
+%%{\em A simple, combinatorial algorithm for solving SDD
+%%systems in nearly-linear time.} In Proceedings of the
+%%45th ACM Symp. Theory of Comp. (STOC '13), pages
+%%911-920, New York, 2013.
+%%
+%%\bibitem{DDH}D. Hoske, D. Lukarski, H. Meyerhenke, and
+%%M. Wegner. {\em Is nearly-linear the same in theory and
+%%practice? A case study with a combinatorial laplacian
+%%solver.} Computing Research Repository,
+%%abs/1502.07888, 2015.
+%%\bibitem{BKJ} E.~G.Boman, K.Deweese,J.~R. Gilbert. {\em Evaluating the Potential of a Laplacian Linear Solver.
+%%arxiv.org/pdf/1505.00875,2015.}
+%
+%\bibitem{Kern} J.A. Kelner, L. Orecchia, A. Sidford, and Z.A. Zhu. A simple, combinatorial algorithm for solving SDD
+%systems in nearly-linear time. In Proceedings of the
+%45th ACM Symp. Theory of Comp. (STOC '13), pages
+%911-920, New York, 2013.
+%
+%\bibitem{DDH} D. Hoske, D. Lukarski, H. Meyerhenke, and M. Wegner.  Is nearly-linear the same in theory and
+%practice? A case study with a combinatorial laplacian
+%solver. Computing Research Repository,
+%abs/1502.07888, 2015.
+%\bibitem{BKJ} E.G. Boman, K. Deweese, J.R. Gilbert. Evaluating the Potential of a Laplacian Linear Solver. arxiv.org/pdf/1505.00875,2015.
+%\bibitem{HCS09} H. Avron, D. Chen, G. Shklarsk, and S. Toledo. Combiantorial preconditioners for preconditioners for scalar elliptic, SIAM J. Martix Anal. Appl. 31(2) (2009), pp. 694–720.
+%\bibitem{UF} T.A. Davis, Y. Hu. The University of Florida Sparse Matrix Collection. ACM Transactions on
+%Mathematical Software, 38(1):1:1-1:25, Nov. 2011.
+%\bibitem{taucs} S. Toledo, D. Chen and V. Rotkin.  TAUCS, a Library of Sparse Linear Solvers.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 参考文献，数值算法
+\bibitem{ME52}Hestenes, M., Stiefel, E.: Methods of conjugate gradients for solving linear systems. J. Res. Natl. Bureau Standards. \textbf{49}, 409-436 (1952)
+\bibitem{Book1} Concus, P., Golub, G.-H., O’Leary, D.-P.: A generalized conjugate gradient method for the
+numerical solution of elliptic partial differential equations in Sparse Matrix Computations. J.R. Bunch and D.J. Rose, eds., Academic Press, New York. 309-332 (1976)
+\bibitem{Book2} Saad, Y.: Iterative Methods for Sparse Liners Systems, 2nd edn. SIAM, Philadelphia (2003)
+
+\bibitem{ABN} Abraham, I., Bartal, Y., Neiman, O.: Nearly tight low stretch spanning
+trees. In Proceedings of the 49th Annual IEEE Symposium on Foundations
+of Computer Science. 781-790 (2008)
+\bibitem{AKPW} Alon, N., Karp, R.-M., Peleg, D., West, D.:  A graph theoretic game and its application to the k server problem. SIAM J. Comput. \textbf{24}, 78-100 (1995)
+
+\bibitem{AL86} Axelsson, O, Lindskog, G.: On the rate of convergence of the preconditioned conjugate gradient method. Numerische Mathematic \textbf{48}, 499-523 (1986)
+\bibitem{Aw} Awerbuch, B.: Complexity of network synchronization. Journal of the ACM. \textbf{32}, 804-823 (1985)
+\bibitem{BH} Boman, E.-G., Hendrickson, B.: Support Theory for Preconditioning. SIAM J. Matrix Anal. Appl. \textbf{25}, 694-717 (2003)
+\bibitem{BH01} Boman, E.-G., Hendrickson, B.: On spanning tree preconditioners. Manuscript. Sandia National Lab., (2001)
+
+\bibitem {BHT} Boman, E.-G., Chen, D., Hendrickson, Toledo, B.-S.:  Maximum weight-basis Preconditioners. Numer. Linear Algebra wiht Appl. \textbf{11}, 695-721 (2004).
+
+\bibitem{CGT} Chen, D., Gilbert, J.-R, Toledo, S.: Obtaining bounds on the two norm of a matrix from the splitting lemma. Electronic Transactions on
+Numer. Anal. \textbf{21}, 28-46 (2005)
+\bibitem{factor}Boman, E.-G.,Chen, D., Parekh, O., Toledo, S.: On factor width and symmetric h-matrices, Linear Algebra and its Appl. \textbf{405}, 239-248 (2005)
+
+\bibitem{EEST} Elkin, M., Emek, Y., Spielman, D.-A., Teng, S.-H.: Lower-stretch spanning trees. SIAM Journal on Computing \textbf{32}, 608-628 (2008).
+\bibitem{support}Bern, M., Gilbert, J.R., Hendrickson, B., Nguyen, N., Toledo S.: Support-graph
+preconditioners. SIAM J. Matrix Anal. Appl. \textbf{27}, 930-951 (2006)
+\bibitem{Chen_Tov} Chen, Toledo, D.-S.: Vaidya's preconditioners: Implementation and experimental study. Electronic Transactions on Numerical Ana. \textbf{16}, 30-49 (2003)
+\bibitem{KMT} Koutis, I., Miller, G.-L., Tolliver, D.: Combinatorial preconditioners and multilevel solvers for problems in computer vision and image processing. Computer
+Vision and Image Understanding \textbf{115}, 1638-1646 (2011)
+
+%\bibitem{MJB}
+% Bern M, Gilbert JR, Hendrickson B, Nguyen N, Toledo S. Support-graph
+%preconditioners. SIAM J Matrix Anal Appl 2006;27(4):930–51
+
+\bibitem{GG} Strang, G., Fix, G.-J.: An Analysis of the Finite Element Method. Prentice-Hall, Englewood Cliffs, NJ 07632, USA (1973)
+
+
+
+\bibitem{LA} Hageman, L.-A., Young, D.-M.: Applied iterative methods. Computer Science and Applied Mathematics. Academic
+Press, New Y ork, NY, USA (1981)
+
+\bibitem{LB} Livne, O.-E., Brandt, A.: Lean algebraic multigrid (LAMG): Fast graph Laplacian linear solver. SIAM Journal on Scientific Comp. \textbf{34}, 499-522 (2012)
+
+
+\bibitem{Germban} Gremban, K.: Combinatorial Preconditioners for Sparse, Symmetric, Diagonally Dominant Linear Systems. PhD thesis, Carnegie Mellon University, CMU-CS-96-123 (1996)
+\bibitem{petal} Abraham, I., Neiman, O.: Using petal-decompositions to
+build a low stretch spanning tree. In Proceedings of the
+44th symposium on Theory of Computing, STOC '12,
+ New York, NY, USA, ACM. 395-406 (2012)
+\bibitem{vaidya} Vaidya, P.: Solving linear equations with symmetric diagonally dominant matrices by constructing good preconditioners. Unpublished manuscript. A talk based on
+the manuscript was presented at the IMA Workshop on Graph Theory and Sparse
+Matrix Computation, Oct (1991)
+
+
+
+\bibitem{SF} McCormick, S.-F.: Multigrid Methods, Frontiers in Applied Mathematics. SIAM Books, \textbf{3}, Philadelphia (1987).
+%
+%\bibitem{ST04}
+%D. A.~Spielman and S.H.~Teng. Nearly-linear time algorithms for graph
+%partitioning, graph sparsification, and solving linear systems. In Proceedings of the
+%thirty-sixth annual ACM Symposium on Theory of Computing, pages 81–90, 2004.
+%Full version available at http://arxiv.org/abs/cs.DS/0310051.
+
+
+%\bibitem{ST04}
+%D.~A. Spielman and S.~H. Teng. {\em Nearly-linear time algorithms for graph
+%partitioning, graph sparsification, and solving linear systems}. In Proceedings of the
+%thirty-sixth annual ACM Symposium on Theory of Computing,(2004), pp.~81-90.
+%%Full version available at http://arxiv.org/abs/cs.DS/0310051.
+%\bibitem{ST06}
+%D.~A. Spielman and S.~H. Teng. {\em Nearly-linear time
+%algorithms for preconditioning and solving symmetric,
+%diagonally dominant linear systems}. CoRR,
+%abs/cs/0607105, 2006.
+
+\bibitem{ST04} Spielman, D.-A., Teng, S.-H.: Nearly-linear time algorithms for graph
+partitioning, graph sparsification, and solving linear systems. In Proceedings of the
+thirty-sixth annual ACM Symposium on Theory of Computing, 81-90 (2004)
+%Full version available at http://arxiv.org/abs/cs.DS/0310051.
+\bibitem{ST06} Spielman, D.-A., Teng, S.-H.: Nearly-linear time algorithms for preconditioning and solving symmetric, diagonally dominant linear systems. CoRR,
+abs/cs/0607105, 2006
+
+\bibitem{SW}
+Spielman, D.-A., Woo, J.: A Note on Preconditioning by Low-Stretch
+Spanning Trees, (2009)
+\bibitem{SS08} Spielman, D.A., Srivastava, N.: Graph sparsification by effective resistances. In Proceedings of the 40th annual ACM Symposium on Theory of Computing, 563-568 (2008)
+
+\bibitem{KMP10} Koutis, I., Miller, G.-L., Peng, R.: Approaching optimality for solving sdd linear
+systems. In Foundations of Computer Science (FOCS), 2010 51st Annual IEEE
+Symposium on, 235-244 (2010)
+
+\bibitem{DA}Spielman, D.-A.: Algorithms, Graph Theory, and Linear
+Equations in Laplacian Matrices. In Proceedings of the
+International Congress of Mathematicians, (2010)
+\bibitem{KMP11} Koutis, I., Miller, G.-L., Peng, R.: A nearly$-mlogn$ time solver for sdd linear
+systems. In Foundations of Computer Science (FOCS), 2011 52nd Annual IEEE
+Symposium on, 590-598 (2011)
+
+
+
+%\bibitem{Kern}J.~A. Kelner, L. Orecchia, A. Sidford, and Z.~A. Zhu.
+%{\em A simple, combinatorial algorithm for solving SDD
+%systems in nearly-linear time.} In Proceedings of the
+%45th ACM Symp. Theory of Comp. (STOC '13), pages
+%911-920, New York, 2013.
+%
+%\bibitem{DDH}D. Hoske, D. Lukarski, H. Meyerhenke, and
+%M. Wegner. {\em Is nearly-linear the same in theory and
+%practice? A case study with a combinatorial laplacian
+%solver.} Computing Research Repository,
+%abs/1502.07888, 2015.
+%\bibitem{BKJ} E.~G.Boman, K.Deweese,J.~R. Gilbert. {\em Evaluating the Potential of a Laplacian Linear Solver.
+%arxiv.org/pdf/1505.00875,2015.}
+
+\bibitem{Kern} Kelner, J.-A., Orecchia, L., Sidford, A., Zhu. Z.-A.: A simple, combinatorial algorithm for solving SDD systems in nearly-linear time. In Proceedings of the
+45th ACM Symp. Theory of Comp. (STOC '13), New York, 911-920 (2013)
+
+\bibitem{DDH} Hoske, D., Lukarski, D., Meyerhenke, H., Wegner, M.: Is nearly-linear the same in theory and
+practice? A case study with a combinatorial laplacian
+solver. Computing Research Repository,
+abs/1502.07888, 2015.
+\bibitem{BKJ} Boman, E.-G., Deweese, K., Gilbert, J.-R.: Evaluating the Potential of a Laplacian Linear Solver. arxiv.org/pdf/1505.00875, 2015
+\bibitem{HCS09} Avron, H., Chen, D., Shklarsk, G., Toledo, S.: Combiantorial preconditioners for preconditioners for scalar elliptic, SIAM J. Martix Anal. Appl. \textbf{31}, 694-720 (2009)
+\bibitem{UF} Davis, T.-A., Hu, Y.:  The University of Florida Sparse Matrix Collection. ACM Transactions on
+Mathematical Software, \textbf{38}, (2011)
+%\bibitem{taucs} Toledo, S., Chen, D., Rotkin, V.:  TAUCS, a Library of Sparse Linear Solvers.
+
+
+\end{thebibliography}
+
+
+\end{document}
+% end of file template.tex
+
